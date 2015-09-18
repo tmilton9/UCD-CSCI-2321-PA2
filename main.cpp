@@ -2,19 +2,14 @@
 #include <cmath>
 #include "Point.h"
 #include "Cluster.h"
-//#include <cassert>
-using namespace std;
+#include <cassert>
+//using namespace std;
 using namespace Clustering;
 //double computeArea(Point a, Point b, Point c);
 int main(void) {
 
     Point p1(3);
-    cout << p1;
-
-
-
-
-
+    std::cout << p1;
 
     return 0;
 

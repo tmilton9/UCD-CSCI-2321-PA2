@@ -35,9 +35,6 @@ namespace Clustering {
 // Destructor
     Point::~Point() {
 
-        //for (int j = 0; j < dim; ++j) {
-         //   delete values[j];
-        //
         delete[] values;
     }
 
