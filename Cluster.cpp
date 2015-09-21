@@ -5,6 +5,7 @@
 #include "Cluster.h"
 
 namespace Clustering {
+
     typedef Point *PointPtr;
 
 
@@ -75,7 +76,7 @@ namespace Clustering {
 
         LNode *temp;
         temp = points;
-        points = new LNode(&rhs);
+        points = new LNode(&Ptemp);
         points->next = temp->next;
         delete[]temp;
         size++;

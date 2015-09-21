@@ -6,7 +6,7 @@
 #define TRAVIS_MILTON_PA2_POINT_H
 
 #include <iostream>
-namespace Clustering{
+namespace Clustering {
 
 class Point {
 
@@ -20,13 +20,13 @@ public:
     Point(int, double *); // array inputed with dimentionallity
 
     Point(const Point &);
-    Point &operator =(const Point&);
+    Point &operator =(const Point*);
     // Destructor
     ~Point();
     static Point origin;
 
     // Mutator methods
-    void setValue(int, double);
+    void setValue();
 
 
     // Accessor methods

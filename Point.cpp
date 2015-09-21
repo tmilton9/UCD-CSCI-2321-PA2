@@ -29,8 +29,9 @@ namespace Clustering {
     Point::Point(const Point &other) {
         dim = other.dim;
         values = new double[dim];
-        for (int i = 0; i < dim; i++)
-            values [i]= other[i];
+        for (int i = 0; i < dim; i++) {
+            values[i] = other.values[i];
+        }
     }
 // Destructor
     Point::~Point() {
@@ -41,9 +42,15 @@ namespace Clustering {
 // Mutator methods
 // Change the values of private member variables
 
-    void Point::setValue(int x, double y) {
-        dim = x;
-        *values = y;
+    void Point::setValue() {
+       double temp;
+        //dim = x;
+        for (int i = 0; i < dim; ++i) {
+            std::cout << "Enter a value: ";
+            std::cin >> temp;
+            values[i] = temp;
+        }
+
 
     }
 
@@ -70,8 +77,8 @@ namespace Clustering {
 
 //overloaded operators
 
-    Point &Point::operator=(const Point &Other) {
-        if (this == &Other) {
+    Point &Point::operator=(const Point *Other) {
+        if (this == Other) {
             return *this;
         } else {
             if (values != nullptr) {
@@ -79,13 +86,13 @@ namespace Clustering {
                   //  delete[] values[i];
                 delete[] values;
             }
-            this->dim = Other.dim;
+            this->dim = Other->dim;
 
             values = new double [dim];
             for (int i = 0; i < dim; i++)
                 this->values = nullptr;
             for (int i = 0; i < dim; i++)
-                values[i] = Other.values[i];
+                values[i] = Other->values[i];
         }
         return *this;
     }
@@ -157,15 +164,16 @@ namespace Clustering {
             std::cout << lhs.values[i] << ", ";
         }
         std::cout <<"/n";
-        //return *this;
+
     }
 
     std::istream operator>>(std::istream &is, Point &lhs) {
+
         for (int i = 0; i < lhs.dim; ++i) {
             std::cout << "Enter  numeric value ";
             std::cin >> lhs.values[i];
         }
-        //return;
+
     }
 
     bool operator<(Point &lhs, const Point &rhs) {
