@@ -1,6 +1,6 @@
 
 #include "Point.h"
-//#include "Cluster.h"
+#include "Cluster.h"
 //#include <cassert>
 
 using namespace Clustering;
@@ -10,15 +10,16 @@ int main() {
 
 Point p1(3);
 bool b1,b2;
-    std::cout << "loded";
+    std::cout << "loded /n";
 
     p1.setValue();
     Point p2(3);
     p2.setValue();
     Point p3(p1);
-
+    p1*=2;
+    p2/=2;
     b1 =  p1<p2;
-    b2 = p1>p2;
+    b2 =  p1>p2;
     //Cluster c1;
     //c1.add(&p1);
     //c1.add(&p2);
