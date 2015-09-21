@@ -7,9 +7,7 @@
 namespace Clustering {
     typedef Point *PointPtr;
 
-    Cluster::Cluster() {
 
-    }
 
     Cluster::Cluster(const Cluster &other) {
         size = other.size;
@@ -19,7 +17,7 @@ namespace Clustering {
 
             LNode **dst = &points;
             LNode *ptr = other.points;
-            while (ptr);
+            while (ptr)
             {
                 *dst = new LNode(*ptr);
                 dst = &(*dst)->next;
@@ -43,6 +41,7 @@ namespace Clustering {
         points = new LNode(ptr);
         points->next = temp->next;
         delete[]temp;
+        size++;
     }
 
     const PointPtr &Cluster::remove(PointPtr const &ptr) {
@@ -51,6 +50,7 @@ namespace Clustering {
         points->next = nullptr;
         points->p = nullptr;
         delete[] points;
+        size--;
 
         return temp;
     }
@@ -58,59 +58,136 @@ namespace Clustering {
     Cluster &Cluster::operator+=(const Cluster &rhs) {//combine clusters a+b
         for (int j = 0; j < size; ++j) {
             points = points->next;
-        }
+
         if (points->next == NULL) {
             for (int i = 0; i < rhs.size; ++i) {
                 points->next = rhs.points->next;
+                size++;
             }
+        }
         }
         return *this;
     }
 
 
     Cluster &Cluster::operator+=(const Point &rhs) {
-        PointPtr temp;
-        temp = &rhs;
+        Point Ptemp = rhs;
 
-        Cluster Tempc(*this);
-        Tempc.add(temp);
-        return Tempc;
+        LNode *temp;
+        temp = points;
+        points = new LNode(&rhs);
+        points->next = temp->next;
+        delete[]temp;
+        size++;
+
+        return *this;
+
     }
 
 
     Cluster &Cluster::operator-=(const Cluster &rhs) {
-        return <#initializer#>;
+
+        for (int j = 0; j < size; ++j) {
+            points = points->next;
+
+            if (points->p == rhs.points->p) {
+                remove(points->p);
+                size--;
+            }
+        }
+        return *this;
     }
 
     Cluster &Cluster::operator-=(const Point &rhs) {
-        return <#initializer#>;
+        //Point temp = rhs;
+
+        Cluster Tempc(*this);
+        for (int i = 0; i < Tempc.size; ++i) {
+
+            if (Tempc.points->p == &rhs) {
+                remove(Tempc.points->p);
+                Tempc.size--;
+
+            }
+        }
+        return Tempc;
+
+
     }
 
     const Cluster operator+(const Cluster &lhs, const Cluster &rhs) {
+        Cluster tempL(lhs);
+        Cluster tempR(rhs);
 
-        return Cluster();
+        return (tempL += tempR);
     }
 
     const Cluster operator-(const Cluster &lhs, const Cluster &rhs) {
-        return Cluster();
+        Cluster tempL(lhs);
+        Cluster tempR(rhs);
+        return (tempL-=tempR);
     }
 
     const Cluster operator+(const Cluster &lhs, const PointPtr &rhs) {
-        return Cluster();
+        PointPtr temp;
+        temp = rhs;
+
+        Cluster Tempc(lhs);
+        Tempc.add(temp);
+        return Tempc;
     }
 
     const Cluster operator-(const Cluster &lhs, const PointPtr &rhs) {
-        return Cluster();
+        PointPtr temp;
+        temp = rhs;
+
+        Cluster Tempc(lhs);
+
+            Tempc.remove(temp);
+
+        return Tempc;
     }
     bool operator==(const Cluster &lhs, const Cluster &rhs){
+        Cluster tempL(lhs);
+        Cluster tempR(rhs);
+
+        while (tempL.points->next != NULL)
+        {
+            if (tempL.points->p != tempR.points->p){
+                return false;
+            }
+        tempL.points = tempL.points->next;
+        tempR.points = tempR.points->next;
+        }
         return true;
     }
     std::ostream &operator<<(std::ostream &ostream, const Cluster &cluster) {
-        return <#initializer#>;
+        Cluster TempC(cluster);
+
+
+        while(cluster.points->next != NULL) {
+            std::cout << TempC.points->p->getValue() << ", ";
+            TempC.points = TempC.points->next;
+        }
+        std::cout <<"/n";
+
+
+
+        return ostream;
     }
 
     std::istream &operator>>(std::istream &istream, Cluster &cluster) {
-        return <#initializer#>;
+        PointPtr temp;
+        int num;
+        std::cout << "Enter the number of points to add ";
+        std::cin >> num;
+        for (int i = 0; i < num; ++i) {
+            std::cout << "Enter the point you want to add: ";
+
+            std::cin >> *temp;
+                    cluster.add(temp);
+        }
+        return istream;
     }
 }
 

@@ -30,9 +30,9 @@ public:
 
 
     // Accessor methods
-    double getValue(int)const;
+    double getValue()const;
     int getDims() const { return dim; }
-    double &operator[](int index) { return values[index - 1]; } // TODO out-of-bds?
+    double &operator[](int index) const { return values[index - 1]; } // TODO out-of-bds?
 
     // Member function
     double distanceTo(const Point &)const;

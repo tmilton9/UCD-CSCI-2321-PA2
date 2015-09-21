@@ -41,15 +41,18 @@ namespace Clustering {
 // Mutator methods
 // Change the values of private member variables
 
-    void Point::setValue(int, double) {
-
+    void Point::setValue(int x, double y) {
+        dim = x;
+        *values = y;
 
     }
 
 // Accessors
 // Return the current values of private member variables
 
-    double Point::getValue(int) const { }
+    double Point::getValue() const {
+        return *values;
+    }
 
 
 //Member function
@@ -150,10 +153,11 @@ namespace Clustering {
     }
 
     std::ostream operator<<(std::ostream &os, const Point &lhs) {
-        for (int i = 0; i < this->dim; ++i) {
-            std::cout << this->values[i] << ", ";
+        for (int i = 0; i < lhs.dim; ++i) {
+            std::cout << lhs.values[i] << ", ";
         }
         std::cout <<"/n";
+        //return *this;
     }
 
     std::istream operator>>(std::istream &is, Point &lhs) {
@@ -161,15 +165,16 @@ namespace Clustering {
             std::cout << "Enter  numeric value ";
             std::cin >> lhs.values[i];
         }
+        //return;
     }
 
     bool operator<(Point &lhs, const Point &rhs) {
-        bool ifTrue;
+        bool ifTrue = false;
         if (lhs.dim == rhs.dim) {
 
             for (int i = 0; i < lhs.dim; ++i) {
                 if (lhs.values[i] > rhs.values[i])
-                    return ifTrue = false;
+                    return false;
                 else
                     ifTrue = true;
             }
@@ -177,7 +182,7 @@ namespace Clustering {
         }
         else {
             std::cout << "Unable to compute, points of different dimentions\n";
-            return ifTrue = false;
+            return false;
         }
     }
 
@@ -188,7 +193,7 @@ namespace Clustering {
             for (int i = 0; i < lhs.dim; ++i) {
                 if (lhs.values[i] < rhs.values[i])
 
-                    return ifTrue = false;
+                    return false;
                 else
                     ifTrue = true;
             }
@@ -196,7 +201,7 @@ namespace Clustering {
         }
         else {
             std::cout << "Unable to compute, points of different dimentions\n";
-            return ifTrue = false;
+            return false;
         }
 
     }
@@ -208,18 +213,18 @@ namespace Clustering {
             for (int i = 0; i < lhs.dim; ++i) {
                 if (lhs.values[i] > rhs.values[i]) {
                     if (lhs.values[i] != rhs.values[i]) {
-                        return ifTrue = false;
+                        return false;
                     }
                 }
                 else
                     ifTrue = true;
             }
-            return ifTrue = false;
+            return false;
         }
 
         else {
             std::cout << "Unable to compute, points of different dimentions\n";
-            return ifTrue = false;
+            return false;
         }
     }
 
@@ -231,7 +236,7 @@ namespace Clustering {
             for (int i = 0; i < lhs.dim; ++i) {
                 if (lhs.values[i] < rhs.values[i]) {
                     if (lhs.values[i] != rhs.values[i]) {
-                        return ifTrue = false;
+                        return false;
                     }
                 }
                 else
@@ -242,7 +247,7 @@ namespace Clustering {
         }
         else {
             std::cout << "Unable to compute, points of different dimentions\n";
-            return ifTrue = false;
+            return false;
         }
     }
 
@@ -251,14 +256,14 @@ namespace Clustering {
         if (lhs.dim == rhs.dim) {
             for (int i = 0; i < lhs.dim; ++i) {
                 if (lhs.values[i] != rhs.values[i])
-                    return ifTrue = false;
+                    return false;
                 else
                     ifTrue = true;
             }
         }
         else {
             //std::cout << "Unable to compute, points of different dimentions\n";
-            return ifTrue = false;
+            return false;
         }
         return ifTrue;
     }
@@ -268,14 +273,14 @@ namespace Clustering {
         if (lhs.dim == rhs.dim) {
             for (int i = 0; i < lhs.dim; ++i) {
                 if (lhs.values[i] != rhs.values[i])
-                    return ifFalse = true;
+                    return true;
                 else
                     ifFalse = false;
             }
         }
         else {
             std::cout << "Unable to compute, points of different dimentions\n";
-            return ifFalse = false;
+            return false;
         }
         return ifFalse;
     }

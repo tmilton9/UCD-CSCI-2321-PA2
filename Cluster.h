@@ -20,10 +20,13 @@ namespace Clustering {
         PointPtr p;
         LNodePtr next;
         LNode(){}
-        LNode(const PointPtr & arg) : LNode (arg), next() {}
+
+        LNode(const PointPtr & arg);
         LNode(LNode& arg) : p(arg.p), next() {}
        //LNode(LNode& , LNode* link) : p(arg.p), next(link);
     };
+
+    LNode::LNode(const PointPtr & arg) : p(arg), next() {}
 
     class Cluster {
         int size;
@@ -42,7 +45,6 @@ namespace Clustering {
         const PointPtr &remove(const PointPtr &);// remove a point and return its pointer
 
         // Overloaded operators
-        //PointPtr &operator[](int index){ return this->points[index - 1]; }; //
         // Set-preserving operators (do not duplicate points in the space)
         // Friends
         friend bool operator==(const Cluster &lhs, const Cluster &rhs);
