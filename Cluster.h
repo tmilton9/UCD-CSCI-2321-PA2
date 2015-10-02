@@ -1,5 +1,9 @@
 //
-// Created by Travis Milton on 9/13/15.
+//  cluster.h
+//  UCD-CSCI-2321-PA2
+//
+//  Created by Travis Milton on 9/29/15.
+//  Copyright © 2015 Travis Milton. All rights reserved.
 //
 
 #ifndef TRAVIS_MILTON_PA2_CLUSTER_H
@@ -20,13 +24,12 @@ namespace Clustering {
         PointPtr p;
         LNodePtr next;
         LNode(){}
-
-        LNode(const PointPtr & arg);
+        // LNode(Point arg): p(&arg), next(nullptr){}
+        LNode(const PointPtr & arg, PointPtr): p(arg), next(nullptr) {}
         LNode(LNode& arg) : p(arg.p), next() {}
-       //LNode(LNode& , LNode* link) : p(arg.p), next(link);
+
     };
 
-    LNode::LNode(const PointPtr & arg) : p(arg), next() {}
 
     class Cluster {
         int size;
@@ -41,7 +44,10 @@ namespace Clustering {
         ~Cluster();
 
         // Set functions: They allow calling c1.add(c2.remove(p));
+        void ins(LNodePtr,LNodePtr,LNodePtr);
+        void del();
         void add(const PointPtr &);//add a point
+        void cpy(LNodePtr);
         const PointPtr &remove(const PointPtr &);// remove a point and return its pointer
 
         // Overloaded operators
@@ -71,4 +77,5 @@ namespace Clustering {
 
     };
 }
+
 #endif //TRAVIS_MILTON_PA2_CLUSTER_H

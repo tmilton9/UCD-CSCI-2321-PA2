@@ -1,84 +1,133 @@
 //
-// Created by Travis Milton on 9/13/15.
+//  cluster.cpp
+//  UCD-CSCI-2321-PA2
+//
+//  Created by Travis Milton on 9/29/15.
+//  Copyright © 2015 Travis Milton. All rights reserved.
 //
 
-#include "Cluster.h"
+#include "cluster.h"
+
 
 namespace Clustering {
 
-    typedef Point *PointPtr;
 
 
 
-    Cluster::Cluster(const Cluster &other) {
+    Cluster::Cluster(const Cluster &other) {            // copy constructor
         size = other.size;
         if (size == 0)
-            new Cluster();
+            points=nullptr;
         else {
 
-            LNode **dst = &points;
-            LNode *ptr = other.points;
-            while (ptr)
-            {
-                *dst = new LNode(*ptr);
-                dst = &(*dst)->next;
-                ptr = ptr->next;
-            }
+            cpy(other.points);
         }
     }
 
-    Cluster::~Cluster() {
-
+    Cluster::~Cluster() {                                 //destructor
+        //del();
     }
 
-    Cluster &Cluster::operator=(Cluster &other) {
-        std::swap(points, other.points); // we get his list; he gets ours
+    Cluster &Cluster::operator=(Cluster &other) {         // overloaded =
+        if (this != &other) {
+            del();
+            cpy(other.points);
+        }
         return *this;
     }
 
-    void Cluster::add(PointPtr const &ptr) {
-        LNode *temp;
-        temp = points;
-        points = new LNode(ptr);
-        points->next = temp->next;
-        delete[]temp;
-        size++;
+    void Cluster::add(PointPtr const &ptr) {              // add function
+        if(size == 0){
+            points = new LNode(ptr, nullptr);
+        } else {
+            LNodePtr c = points,n=points->next,
+                    a = new LNode(ptr, nullptr);
+            while (*(c->p)<= *ptr) {
+                if (n == nullptr || *(n->p)> *ptr) {
+                    break;
+                }else {
+                    c=n;
+                    n=n->next;
+                }
+            }
+            ins(c,a,n);
+        }
+        size ++;
     }
 
-    const PointPtr &Cluster::remove(PointPtr const &ptr) {
-        PointPtr temp;
-        temp = ptr;
+    void Cluster::cpy(LNodePtr pts){
+        LNodePtr reached = pts;
+        LNodePtr curr = new LNode(reached->p,nullptr);
+        points=curr;
+        LNodePtr prev = curr;
+        reached = reached->next;
+
+        for (;reached != nullptr; reached=reached->next) {
+            curr= new LNode(reached->p,nullptr);
+            prev->next = curr;
+            prev = curr;
+        }
+    }
+    void Cluster::del(){
+        if (size!=0){
+            LNodePtr c = points,n = points->next;
+            delete c->p;
+            delete c;
+
+            while (n!= nullptr) {
+                c=n;
+                n=n->next;
+                delete c->p;
+                delete c;
+            }
+        }
+        points=nullptr;
+        size =0;
+    }
+    void Cluster::ins(LNodePtr before, LNodePtr add, LNodePtr after){
+        before->next = add;
+        add->next = after;
+
+    }
+
+    const PointPtr &Cluster::remove(PointPtr const &ptr) {//remove function
+        PointPtr *temp;
+        *temp = ptr;
         points->next = nullptr;
         points->p = nullptr;
         delete[] points;
         size--;
 
-        return temp;
+        return *temp;
     }
 
     Cluster &Cluster::operator+=(const Cluster &rhs) {//combine clusters a+b
         for (int j = 0; j < size; ++j) {
             points = points->next;
 
-        if (points->next == NULL) {
-            for (int i = 0; i < rhs.size; ++i) {
-                points->next = rhs.points->next;
-                size++;
+            if (points->next == nullptr) {
+                for (int i = 0; i < rhs.size; ++i) {
+                    points->next = rhs.points->next;
+                    size++;
+                }
             }
-        }
         }
         return *this;
     }
 
 
     Cluster &Cluster::operator+=(const Point &rhs) {
-        Point Ptemp = rhs;
-
+        Point P = rhs;
+        this->add(&P);
+        /*
+        PointPtr P1 = &P;
         LNode *temp;
-        temp = points;
-        points = new LNode(&Ptemp);
-        points->next = temp->next;
+        temp = points->next;
+        points = new LNode(P1, nullptr);
+
+        points->next = temp;
         delete[]temp;
+        */
         size++;
 
         return *this;
@@ -102,16 +151,16 @@ namespace Clustering {
     Cluster &Cluster::operator-=(const Point &rhs) {
         //Point temp = rhs;
 
-        Cluster Tempc(*this);
-        for (int i = 0; i < Tempc.size; ++i) {
+        //Cluster Tempc(*this);
+        for (int i = 0; i < this->size; ++i) {
 
-            if (Tempc.points->p == &rhs) {
-                remove(Tempc.points->p);
-                Tempc.size--;
+            if (this->points->p == &rhs) {
+                remove(this->points->p);
+                this->size--;
 
             }
         }
-        return Tempc;
+        return *this;
 
 
     }
@@ -144,7 +193,7 @@ namespace Clustering {
 
         Cluster Tempc(lhs);
 
-            Tempc.remove(temp);
+        Tempc.remove(temp);
 
         return Tempc;
     }
@@ -157,8 +206,8 @@ namespace Clustering {
             if (tempL.points->p != tempR.points->p){
                 return false;
             }
-        tempL.points = tempL.points->next;
-        tempR.points = tempR.points->next;
+            tempL.points = tempL.points->next;
+            tempR.points = tempR.points->next;
         }
         return true;
     }
@@ -166,11 +215,16 @@ namespace Clustering {
         Cluster TempC(cluster);
 
 
-        while(cluster.points->next != NULL) {
-            std::cout << TempC.points->p->getValue() << ", ";
+        while(TempC.points->next != NULL) {
+            int j = 1;
+            std::cout << j  << ": ";
+            TempC.points->p->disPnt();
+
             TempC.points = TempC.points->next;
+            std::cout <<"\n";
+            j++;
         }
-        std::cout <<"/n";
+        std::cout <<"\n";
 
 
 
@@ -186,11 +240,12 @@ namespace Clustering {
             std::cout << "Enter the point you want to add: ";
 
             std::cin >> *temp;
-                    cluster.add(temp);
+            cluster.add(temp);
         }
         return istream;
     }
 }
+
 
 
 

@@ -1,14 +1,20 @@
 //
-// Created by Travis Milton on 9/13/15.
+//  Point.cpp
+//  UCD-CSCI-2321-PA2
+//
+//  Created by Travis Milton on 9/29/15.
+//  Copyright © 2015 Travis Milton. All rights reserved.
 //
 
-#include "Point.h"
+#include "point.h"
+#include "cluster.h"
+
 #include <cmath>
 
 
 namespace Clustering {
 
-//Default constructor
+    //Default constructor
     Point::Point(int dimensions) {
         if (dimensions == 0)                //TODO throw exception
             dimensions = 2;
@@ -24,7 +30,7 @@ namespace Clustering {
         for (int i = 0; i < size; i++)
             values [i]= other[i];
     }
-// Copy Constructor
+    // Copy Constructor
 
     Point::Point(const Point &other) {
         dim = other.dim;
@@ -33,17 +39,17 @@ namespace Clustering {
             values[i] = other.values[i];
         }
     }
-// Destructor
+    // Destructor
     Point::~Point() {
 
         delete[] values;
     }
 
-// Mutator methods
-// Change the values of private member variables
+    // Mutator methods
+    // Change the values of private member variables
 
     void Point::setValue() {
-       double temp;
+        double temp;
         //dim = x;
         for (int i = 0; i < dim; ++i) {
             std::cout << "Enter a value: ";
@@ -54,15 +60,22 @@ namespace Clustering {
 
     }
 
-// Accessors
-// Return the current values of private member variables
+    // Accessors
+    // Return the current values of private member variables
 
     double Point::getValue() const {
+
+
         return *values;
     }
+    void Point::disPnt(){
+        for (int i =0; i< dim; i++)
+        {
+            std::cout << values[i] << ", ";
+        }
+    }
 
-
-//Member function
+    //Member function
     double Point::distanceTo(const Point &Other) const {
         double sum = 0.0;
 
@@ -75,7 +88,7 @@ namespace Clustering {
         return sqrt(sum);
     }
 
-//overloaded operators
+    //overloaded operators
 
     Point &Point::operator=(const Point *Other) {
         if (this == Other) {
@@ -83,7 +96,7 @@ namespace Clustering {
         } else {
             if (values != nullptr) {
                 //for (int i = 0; i < dim; i++)
-                  //  delete[] values[i];
+                //  delete[] values[i];
                 delete[] values;
             }
             this->dim = Other->dim;
@@ -159,20 +172,22 @@ namespace Clustering {
         return lhs += rhs;
     }
 
-    std::ostream operator<<(std::ostream &os, const Point &lhs) {
-        for (int i = 0; i < lhs.dim; ++i) {
-            std::cout << lhs.values[i] << ", ";
-        }
-        std::cout <<"/n";
+    std::ostream &operator<<(std::ostream &os, const Point &lhs) {
 
+        for (int i = 0; i < lhs.dim; ++i) {
+            os  << lhs.values[i] << ", ";
+        }
+        os << "\n";
+        return os;
     }
 
-    std::istream operator>>(std::istream &is, Point &lhs) {
+    std::istream &operator>>(std::istream &is, Point &lhs) {
 
         for (int i = 0; i < lhs.dim; ++i) {
             std::cout << "Enter  numeric value ";
-            std::cin >> lhs.values[i];
+            is >> lhs.values[i];
         }
+        return is;
 
     }
 
@@ -292,5 +307,5 @@ namespace Clustering {
         }
         return ifFalse;
     }
-
+    std::ostream& operator <<(std::ostream &, const Cluster &);
 }

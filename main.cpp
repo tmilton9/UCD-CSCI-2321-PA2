@@ -3,11 +3,11 @@
 #include "Cluster.h"
 //#include <cassert>
 
-using namespace Clustering;
+
 
 //double computeArea(Point a, Point b, Point c);
 int main() {
-
+    using namespace Clustering;
 Point p1(3);
 bool b1,b2;
     std::cout << "loded /n";
@@ -20,12 +20,12 @@ bool b1,b2;
     p2/=2;
     b1 =  p1<p2;
     b2 =  p1>p2;
-    //Cluster c1;
-    //c1.add(&p1);
-    //c1.add(&p2);
+    Cluster c1;
+    c1.add(&p1);
+    c1.add(&p2);
 
 
-    //std::cout << p1;
+    std::cout << p1;
     return 0;
 
 }
