@@ -1,6 +1,7 @@
 
 #include "Point.h"
 #include "Cluster.h"
+#include "K-means.h"
 //#include <cassert>
 
 
